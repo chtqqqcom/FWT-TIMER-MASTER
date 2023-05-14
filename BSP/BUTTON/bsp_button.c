@@ -11,6 +11,9 @@
 #include "bsp_exti.h"
 #include "bsp_interface.h"
 
+
+#define   timer_slave_max           6
+
 extern uint8_t Lap_stflag;
 extern uint8_t Connection_count;
 extern SemaphoreHandle_t  BinarySem3_Handle;
@@ -19,6 +22,9 @@ extern uint16_t Data2_Count;
 extern uint16_t DataBuffer1[1024];
 extern uint16_t DataBuffer2[1024];
 extern uint16_t Showhigh;
+extern vu32 Time3value;
+extern uint8_t  slaver_count;
+extern uint16_t timer_slaver_num[timer_slave_max];
 
 BUTTON button[BUTTON_NUM];
 
@@ -461,8 +467,15 @@ static void Down_Fun(void)
 //在计时中手动按下准备按钮可以结束计时（数据不保存），进入下次测试准备
 void Ready_Fun(void)
 {
+//	uint8_t j = 0;
 	char str[20] = { 0 };
 	Timer3_Off();
+//	for(j = 0;j < slaver_count;j++)
+//	{
+//		timer_slaver_num[j] = 0;
+//	}
+//	slaver_count = 0;
+	Time3value = 0;
 	Lap_stflag = 0;
 	sprintf(str, "%s", "准备计时");
 	ILI9486_clear_screen(130, 137, 150, 30);
